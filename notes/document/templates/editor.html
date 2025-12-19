@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MyNotes App</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+</head>
+
+<style>
+    body {
+        background-color: #f8fafc;
+    }
+
+    .text {
+        color: rgb(49, 0, 128);
+        font-weight: bold;
+        font-size: 32px;
+        font-family: 'Times New Roman', Times, serif;
+        text-align: center;
+    }
+
+    /* Sky Blue New Note */
+    .btn-new {
+        background-color: #38bdf8;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-new:hover {
+        background-color: #0ea5e9;
+        transform: scale(1.05);
+    }
+
+    /* Gradient Logout */
+    .btn-logout {
+        background: linear-gradient(135deg, #ff4b5c, #ff7a18);
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-logout:hover {
+        background: linear-gradient(135deg, #ff1e3c, #ff5f00);
+        transform: scale(1.05);
+    }
+
+    /* Save Button */
+    .btn-save {
+        background-color: #22c55e;
+        color: white;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .btn-save:hover {
+        background-color: #16a34a;
+        transform: scale(1.05);
+    }
+
+    .box {
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+</style>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar is-white">
+    <div class="navbar-brand">
+        <a href="{% url 'editor' %}" class="navbar-item has-text-black"
+           style="font-size: 26px; font-weight:bold;">
+            Notes
+        </a>
+
+        <a href="{% url 'editor' %}?docid=0"
+           class="button btn-new ml-3">
+            ➕ New Note
+        </a>
+
+        <a href="{% url 'logout' %}"
+           class="button btn-logout ml-2">
+            🚪 Logout
+        </a>
+    </div>
+</nav>
+
+<hr>
+
+<!-- MAIN CONTENT -->
+<section class="section">
+    <div class="columns">
+
+        <!-- SIDEBAR -->
+        <div class="column is-2">
+            <aside class="menu">
+                <p class="menu-label" style="font-size: 20px; font-weight:bold;">
+                    NOTES
+                </p>
+                <ul class="menu-list">
+                    {% for doc in notes %}
+                        <li>
+                            <a href="{% url 'editor' %}?docid={{ doc.id }}">
+                                {{ doc.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </aside>
+        </div>
+
+        <!-- EDITOR -->
+        <div class="column is-5 mt-3 pt-4">
+            <h3 class="text">MyNotes App</h3>
+            <br>
+
+            <div class="box">
+                <form method="post" action="{% url 'editor' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="docid" value="{{ docid }}">
+
+                    <div class="field">
+                        <label class="label" style="font-size: 22px;">Title</label>
+                        <div class="control">
+                            <input type="text" class="input" name="title"
+                                   placeholder="Enter title"
+                                   {% if note %}value="{{ note.title }}"{% endif %}>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label" style="font-size: 20px;">Content</label>
+                        <div class="control">
+                            <textarea class="textarea" name="content"
+                                      placeholder="Write your note here...">{% if note %}{{ note.content }}{% endif %}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button btn-save">💾 Save</button>
+                        </div>
+
+                        {% if note %}
+                        <div class="control">
+                            <a href="{% url 'delete_note' note.id %}"
+                               class="button is-danger">
+                                🗑 Delete
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
