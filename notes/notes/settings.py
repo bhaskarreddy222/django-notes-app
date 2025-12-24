@@ -14,8 +14,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v8av$*2q(m!l025!8ha=dkdk0k272+uhh6iohn^g5&jijj#s1z'
 
 
-# 🔴 PRODUCTION SETTING
-DEBUG = False
+DEBUG = True
+
 
 # 🔴 Allow Render / all hosts
 ALLOWED_HOSTS = ['*']
@@ -93,12 +93,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-# ✅ REQUIRED FOR RENDER
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
-
-# Default primary key field type
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_ROOT = BASE_DIR / 'staticfiles'

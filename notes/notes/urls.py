@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from document.views import *
+from django.views.generic import RedirectView
+from django.templatetags.static import static
 
 urlpatterns = [
     path('login/', login_page, name='login'),
@@ -25,4 +27,8 @@ urlpatterns = [
     path('', editor, name='editor'),
     path('delete_note/<int:docid>/', delete_note, name='delete_note'),
     path('admin/', admin.site.urls),
+    path(
+        'favicon.ico',
+        RedirectView.as_view(url=static('favicon.ico')),
+    ),
 ]
